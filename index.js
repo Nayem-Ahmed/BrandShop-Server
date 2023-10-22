@@ -64,11 +64,12 @@ async function run() {
       res.send(result)
 
     })
-    app.get('/users', async (req, res) => {
-      const finddata= await result.toArray()
-      res.send(finddata);
-      console.log(id)
-    });
+    // app.get('/users', async (req, res) => {
+    //   const cursor = usercollection.find()
+    //   const finddata= await cursor.toArray()
+    //   res.send(finddata);
+    //   console.log(id)
+    // });
 
 
     app.get('/products/:id', async (req, res) => {
