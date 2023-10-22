@@ -22,7 +22,8 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
-    const productcollection = client.db('productDB').collection('product')
+    const productcollection = client.db('productDB').collection('product');
+    const addcartCollection = client.db('productDB').collection('cart');
     const usercollection = client.db('userDB').collection('user')
     app.post('/products',async(req,res)=>{
         const newproducts = req.body;
@@ -35,6 +36,33 @@ async function run() {
         console.log(newpusers)
         const result = await usercollection.insertOne(newpusers)
         res.send(result)
+    })
+
+    app.post('/cart',async(req,res)=>{
+        const newpusers = req.body;
+        const result = await addcartCollection.insertOne(newpusers)
+        res.send(result)
+    })
+    app.get('/cart', async (req, res) => {
+     const coursor = addcartCollection.find()
+     const result = await coursor .toArray()
+     res.send(result)
+
+    });
+    // ----------
+    app.get('/cart/:id',async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await addcartCollection.findOne(query)
+      res.send(result)
+      
+    })
+    app.delete('/cart/:id',async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id:new ObjectId(id)}
+      const result = await addcartCollection.deleteOne(query)
+      res.send(result)
+
     })
     app.get('/users', async (req, res) => {
       const finddata= await result.toArray()
@@ -96,6 +124,7 @@ async function run() {
       res.send(result)
 
     })
+ 
   
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
